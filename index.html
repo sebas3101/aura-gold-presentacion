@@ -74,6 +74,9 @@
   .adv h3{margin-bottom:2px} .adv .s{font-size:13px;color:var(--muted);margin-bottom:14px}
   .mini{font-size:14px;color:#cfcdc9;line-height:1.7} .mini b{color:var(--text)}
   .span2{grid-column:span 2}
+  .solo-reunion{display:none}
+  .reunion .solo-enlace{display:none!important} .reunion .solo-reunion{display:block}
+  .qr{background:#fff;padding:12px;border-radius:12px;display:inline-block;margin-top:6px} .qr img,.qr canvas{display:block;width:170px;height:170px}
   .row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:16px}
   /* ---- PDF: una diapositiva por página 16:9 ---- */
   @page{size:1600px 900px;margin:0}
@@ -112,13 +115,13 @@
   <!-- Conozcámonos -->
   <section class="slide" data-id="conozcamonos">
     <div class="top"><span>Aura Gold</span><span>Conozcámonos</span></div>
-    <h2>Antes de los números,<br>cuéntanos de ti<span class="dot">.</span></h2>
-    <p class="lead">No hay respuestas correctas. Nos ayuda a mostrarte lo que de verdad te sirve.</p>
+    <h2 id="hConocer">Antes de los números,<br>cuéntanos de ti<span class="dot">.</span></h2>
+    <p class="lead" id="lConocer">No hay respuestas correctas. Nos ayuda a mostrarte lo que de verdad te sirve.</p>
     <div class="grid g3" style="margin-top:26px">
       <div class="card">
-        <label for="nombre" style="margin-top:0">¿Cómo te llamas?</label>
-        <input id="nombre" type="text" placeholder="Tu nombre" autocomplete="given-name">
-        <div class="q">¿Qué te gustaría lograr? <span style="color:var(--muted)">(elige las que quieras)</span></div>
+        <div class="solo-enlace"><label for="nombre" style="margin-top:0">¿Cómo te llamas?</label>
+        <input id="nombre" type="text" placeholder="Tu nombre" autocomplete="given-name"></div>
+        <div class="q" id="qMetas">¿Qué te gustaría lograr? <span style="color:var(--muted)">(elige las que quieras)</span></div>
         <div class="seg" id="metas" data-multi>
           <button data-v="ingresos">Ingresos extra</button>
           <button data-v="crecer">Hacer crecer mis ahorros</button>
@@ -259,7 +262,7 @@
         <div class="card" style="margin-top:12px;padding:14px 18px">
           <div class="tbl"><table><thead><tr><th>Mes</th><th>Rend. bruto</th><th>Resultado del mes</th><th>Tu parte</th><th>Capital</th></tr></thead><tbody id="rows"></tbody></table></div>
         </div>
-        <div class="row no-print"><button class="cta" id="sendSim"></button><span class="s" style="font-size:13px;color:var(--muted)">Abre WhatsApp con tu simulación lista. Nada se guarda en esta página.</span></div>
+        <div class="row no-print solo-enlace"><button class="cta" id="sendSim"></button><span class="s" style="font-size:13px;color:var(--muted)">Abre WhatsApp con tu simulación lista. Nada se guarda en esta página.</span></div>
       </div>
     </div>
     <!-- versión impresa: ejemplos fijos en vez de controles -->
@@ -281,7 +284,7 @@
           <span class="pill">Formación en vivo</span><span class="pill">Señales en tiempo real</span>
           <span class="pill">Indicador AURA</span><span class="pill">Comunidad</span>
         </div>
-        <div class="row no-print"><button class="cta" data-contact="academia">Quiero entrar a la academia</button></div>
+        <div class="row no-print solo-enlace"><button class="cta" data-contact="academia">Quiero entrar a la academia</button></div>
       </div>
       <div class="card">
         <div class="n">Torneos de trading</div>
@@ -292,7 +295,7 @@
           <span class="pill">Ranking en tiempo real</span><span class="pill">Narración en vivo</span>
         </div>
         <p class="mini" style="margin-top:14px">Bolsa del torneo: <b>50 %</b> premios · <b>10 %</b> comisión directa · <b>40 %</b> operativa.<br>Premios: <b>1.º 50 %</b> · <b>2.º 30 %</b> · <b>3.º 20 %</b>.</p>
-        <div class="row no-print"><button class="cta ghost" data-contact="kombat">Quiero saber del próximo torneo</button></div>
+        <div class="row no-print solo-enlace"><button class="cta ghost" data-contact="kombat">Quiero saber del próximo torneo</button></div>
       </div>
     </div>
     <p class="note">Fechas e inscripción: pídeselas a tu asesor.</p>
@@ -452,6 +455,15 @@
   };
   const qa=(new URLSearchParams(location.search).get('a')||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
   const ADV=ASESORES[qa]||null;
+  const REUNION=new URLSearchParams(location.search).get('m')==='reunion';
+  const LINK_CLIENTE=location.origin+location.pathname+(ADV?'?a='+qa:'');
+  if(REUNION){
+    document.body.classList.add('reunion');
+    $('hConocer').innerHTML='Conversemos<span class="dot">.</span>';
+    $('lConocer').textContent='Cuéntanos qué buscas y qué te preocupa. Así te mostramos lo que de verdad te sirve.';
+    $('qMetas').style.marginTop='0';
+    document.querySelector('[data-id=conozcamonos] .top span:last-child').textContent='Conversemos';
+  }
   const first=a=>a.n.split(' ')[0];
   const fmtTel=t=>t.slice(2).replace(/(\d{3})(\d{3})(\d{4})/,'$1 $2 $3');
   const WA_ICON='<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.3a.5.5 0 0 0 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.8 11.9 11.9 0 0 0 4.6 4c1.7.7 2.4.8 3.2.7a2.8 2.8 0 0 0 1.8-1.3 2.3 2.3 0 0 0 .2-1.3c-.1-.1-.3-.2-.5-.3Z"/></svg>';
@@ -522,12 +534,30 @@
 
   function advCard(a,kind,main){
     return `<div class="card adv"><div class="n">${main?'Tu asesor':'Asesor'}</div><h3>${a.n}</h3><div class="s">WhatsApp ${fmtTel(a.t)}</div>
-      <a class="cta${main?'':' ghost'}" href="${waURL(a,kind)}" target="_blank" rel="noopener">${WA_ICON} Escribirle a ${first(a)}</a></div>`;
+      ${REUNION?'':`<a class="cta${main?'':' ghost'}" href="${waURL(a,kind)}" target="_blank" rel="noopener">${WA_ICON} Escribirle a ${first(a)}</a>`}</div>`;
+  }
+  // En reunión: QR para que la persona se lleve la presentación (con el contacto de su asesor) en su celular
+  function qrCard(){
+    return `<div class="card no-print"><div class="n">Llévatela en tu celular</div><p class="mini">Escanea con la cámara: la presentación y el simulador quedan contigo${ADV?' con el contacto de '+first(ADV):''}.</p><div class="qr" id="qrBox"></div></div>`;
+  }
+  function drawQR(){
+    const box=$('qrBox'); if(!box)return;
+    const go=()=>{ try{ box.innerHTML=''; new QRCode(box,{text:LINK_CLIENTE,width:340,height:340,correctLevel:QRCode.CorrectLevel.M}); }catch(e){ box.parentElement.style.display='none'; } };
+    if(window.QRCode) return go();
+    const sc=document.createElement('script'); sc.src='https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js';
+    sc.onload=go; sc.onerror=()=>{ box.parentElement.style.display='none'; }; document.head.appendChild(sc);
   }
   function refreshContact(){
     if(!$('asesores'))return;
     $('sendSim').innerHTML=WA_ICON+(ADV?` Enviar mi simulación a ${first(ADV)}`:' Enviar mi simulación a un asesor');
     const others=Object.values(ASESORES).filter(a=>a!==ADV);
+    if(REUNION){
+      if($('qrBox'))return;   // ya está dibujado; no se vuelve a armar en cada cambio del simulador
+      $('asesores').innerHTML = ADV
+        ? `<div class="grid g3" style="margin-top:0">${advCard(ADV,pending,true)}<div class="card"><div class="n">También te acompañan</div><p class="mini">${others.map(a=>`<b>${a.n}</b> · ${fmtTel(a.t)}`).join('<br>')}</p></div>${qrCard()}</div>`
+        : `<div class="grid g3" style="margin-top:0"><div class="card span2"><div class="n">Asesores</div><p class="mini">${Object.values(ASESORES).map(a=>`<b>${a.n}</b> · ${fmtTel(a.t)}`).join('<br>')}</p></div>${qrCard()}</div>`;
+      return drawQR();
+    }
     $('asesores').innerHTML = ADV
       ? `<div class="grid g3" style="margin-top:0">${advCard(ADV,pending,true)}<div class="card span2"><div class="n">También te acompañan</div><p class="mini">${others.map(a=>`<b>${a.n}</b> · ${fmtTel(a.t)}`).join('<br>')}</p></div></div>`
       : `${pending!=='general'?'<p class="lead" style="margin-bottom:6px">Elige con quién quieres hablar:</p>':''}<div class="grid g4" style="margin-top:8px">${Object.values(ASESORES).map(a=>advCard(a,pending,false)).join('')}</div>`;
