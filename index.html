@@ -143,7 +143,7 @@
     </div>
     <div class="bars" id="bars"></div>
     <div style="height:22px"></div>
-    <p class="note">Rendimiento mensual bruto del sistema en 2026 (octubre es parcial). Datos tomados el 15-oct-2026 de <a href="https://www.myfxbook.com/members/zevenglobal/aura-gold-copy-trading/12047270" target="_blank" rel="noopener">myfxbook.com/members/zevenglobal/aura-gold-copy-trading</a>. Los resultados pasados no garantizan resultados futuros.</p>
+    <p class="note">Rendimiento bruto de cada mes de 2026 (octubre es parcial). Promedio mensual: 8,1 %. Acumulado del año: +108,4 %. Datos tomados el 15-oct-2026 de <a href="https://www.myfxbook.com/members/zevenglobal/aura-gold-copy-trading/12047270" target="_blank" rel="noopener">myfxbook.com/members/zevenglobal/aura-gold-copy-trading</a>. Los resultados pasados no garantizan resultados futuros.</p>
   </section>
 
   <!-- 5 Distribución -->
@@ -184,10 +184,10 @@
         <div class="seg" id="presets">
           <button data-r="-10.9">Mes malo −10,9 %</button>
           <button data-r="3">Bajo 3 %</button>
-          <button data-r="8.1" class="act">Promedio 2026 8,1 %</button>
+          <button data-r="8.1" class="act">Promedio mensual 2026 · 8,1 %</button>
           <button data-r="hist">Repetir 2026</button>
         </div>
-        <label for="rate">Rendimiento mensual bruto: <b id="rateV">8,1 %</b></label>
+        <label for="rate">Rendimiento bruto por mes: <b id="rateV">8,1 %</b></label>
         <input id="rate" type="range" min="-15" max="15" step="0.1" value="8.1">
         <label for="months">Meses: <b id="monthsV">12</b></label>
         <input id="months" type="range" min="1" max="24" step="1" value="12">
@@ -336,8 +336,8 @@
   // Tabla fija para la versión PDF: US$1.000, con y sin bono del 100 %.
   function renderPrint(){
     const trm=+$('trm').value||0, cap0=1000;
-    const sc=[['Un mes malo (−10,9 %)',[-10.9]],['12 meses al 3 %',Array(12).fill(3)],
-              ['12 meses al promedio 2026 (8,1 %)',Array(12).fill(8.1)],['Repetir 2026 (10 meses reales)',HIST]];
+    const sc=[['Un mes malo (−10,9 %)',[-10.9]],['12 meses al 3 % c/mes',Array(12).fill(3)],
+              ['12 meses al promedio mensual 2026 (8,1 % c/mes)',Array(12).fill(8.1)],['Repetir 2026 (10 meses reales)',HIST]];
     const cell=v=>`<td class="${v>=0?'pos':'neg'}">${usd(v)}<br><small>${trm?cop(v*trm):''}</small></td>`;
     $('printCalc').innerHTML=`<div class="card" style="margin-top:24px"><table>
       <thead><tr><th>Escenario · capital US$ 1.000 · sin reinvertir</th><th>Tu ganancia sin bono</th><th>Tu ganancia con bono 100 %*</th></tr></thead>
